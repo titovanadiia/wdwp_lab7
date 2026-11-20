@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<title>Лабораторна робота №7</title>
+<style>
+body {
+    font-family: Arial;
+    background: #eeeeee;
+    padding: 25px;
+}
+section {
+    background: white;
+    padding: 20px;
+    margin: 15px 0;
+    border-radius: 10px;
+}
+button {
+    padding: 9px 15px;
+    cursor: pointer;
+    margin: 5px;
+}
+textarea {
+    width: 95%;
+    height: 100px;
+}
+</style>
+</head>
+
+<body onload="pageLoaded()" ononline="showMessage('З\'єднання відновлено')"
+      onoffline="showMessage('Немає інтернету')">
+
+<h1 id="heading" onclick="changeStyle()" ondblclick="changeText()">
+Лабораторна робота №7
+</h1>
+
+<section>
+<h2>Обробка подій</h2>
+<p id="message" onmouseover="this.style.color='blue'"
+   onmouseout="this.style.color='black'">
+Наведи курсор на цей текст або натисни на заголовок.
+</p>
+<button onclick="showMessage('Подію click виконано!')">Натисни</button>
+</section>
+
+<section>
+<h2>Run Task — інформація про браузер</h2>
+<button onclick="browserInfo()">Run Task</button>
+<textarea id="browserResult" placeholder="Результат..."></textarea>
+</section>
+
+<section>
+<h2>Пошук інформації в тексті</h2>
+<textarea id="inputText" placeholder="Введи будь-який текст"></textarea>
+<br>
+<button onclick="searchText()">Пошук інформації</button>
+<textarea id="searchResult" placeholder="Результат пошуку"></textarea>
+</section>
+
+<section>
+<h2>Array Task — робота з масивом</h2>
+<p>Введи числа через кому:</p>
+<input id="arrayInput" value="5, -3, 8, 0, 12, -7, 4">
+<br>
+<button onclick="arrayTask()">Array Task</button>
+<textarea id="arrayResult" placeholder="Результат"></textarea>
+</section>
+
+<script>
+function pageLoaded() {
+    document.getElementById("message").textContent =
+        "Сторінка успішно завантажена!";
+}
+
+function showMessage(text) {
+    document.getElementById("message").textContent = text;
+}
+
+function changeStyle() {
+    document.getElementById("heading").style.color = "purple";
+}
+
+function changeText() {
+    document.getElementById("heading").textContent =
+        "Заголовок змінено подвійним натисканням!";
+}
+
+function browserInfo() {
+    let result = "Браузер: " + navigator.userAgent +
+        "\nМова: " + navigator.language +
+        "\nПлатформа: " + navigator.platform +
+        "\nАдреса сторінки: " + location.href +
+        "\nНазва сторінки: " + document.title +
+        "\nКількість форм: " + document.forms.length +
+        "\nЧас звернення: " + new Date().toLocaleString();
+
+    document.getElementById("browserResult").value = result;
+}
+
+function searchText() {
+    let text = document.getElementById("inputText").value;
+
+    let words = text.match(/[а-яА-ЯіїєґІЇЄҐa-zA-Z]+/g) || [];
+    let digits = text.match(/\d/g) || [];
+    let integers = text.match(/-?\d+/g) || [];
+
+    let result = "Кількість слів: " + words.length +
+        "\nКількість цифр: " + digits.length +
+        "\nЦілі числа: " + integers.join(", ") +
+        "\nСлова на літеру А: " +
+        words.filter(w => /^а/i.test(w)).join(", ");
+
+    document.getElementById("searchResult").value = result;
+}
+
+function arrayTask() {
+    let A = document.getElementById("arrayInput").value
+        .split(",")
+        .map(Number)
+        .filter(n => !isNaN(n));
+
+    // Обробка масиву: завдання 6.15 з методички
+    let evenSum = 0;
+    let oddProduct = 1;
+
+    A.forEach((value, index) => {
+        if ((index + 1) % 2 === 0) {
+            evenSum += value;
+        } else {
+            oddProduct *= value;
+        }
+    });
+
+    document.getElementById("arrayResult").value =
+        "Масив A: " + A.join(", ") +
+        "\nСума елементів на парних позиціях: " + evenSum +
+        "\nДобуток елементів на непарних позиціях: " + oddProduct;
+}
+</script>
+
+</body>
+</html>
